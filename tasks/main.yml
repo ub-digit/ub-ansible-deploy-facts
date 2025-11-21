@@ -1,0 +1,15 @@
+---
+- name: Set host facts
+  ansible.builtin.set_fact:
+    repo_name: '{{ repo_name }}'
+    repo_path: '{{ repo_path }}'
+    secrets_env_example_path: "{{ [repo_path, docker_directory, 'secrets.env.example'] | path_join }}"
+    secrets_env_path: "{{ [repo_path, docker_directory, 'secrets.env'] | path_join }}"
+    docker_directory_path: '{{ [repo_path, docker_directory] | path_join }}'
+    apache_site_conf_suffix: "{{ inventory_hostname_apache_site_conf_suffix if inventory_hostname != 'production' else '.conf' }}"
+    env_variables_host_file: "{{ [playbook_dir, 'vars', inventory_hostname, 'env.yml'] | path_join }}"
+    secret_env_variables_host_file: "{{ [playbook_dir, 'vars', inventory_hostname, 'secret_env.yml'] | path_join }}"
+  vars:
+    inventory_hostname_apache_site_conf_suffix: '-{{ inventory_hostname }}.conf'
+    repo_name: "{{ docker_git_repo_url | regex_search('\\/([^\\/]+)\\.git', '\\1') | first }}"
+    repo_path: "{{ [deploy_directory, docker_git_repo_url | regex_search('\\/([^\\/]+)\\.git', '\\1') | first] | path_join }}"
