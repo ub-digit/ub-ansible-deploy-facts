@@ -7,7 +7,9 @@
     secrets_env_path: "{{ [repo_path, docker_directory, 'secrets.env'] | path_join }}"
     docker_directory_path: '{{ [repo_path, docker_directory] | path_join }}'
     apache_site_conf_suffix: "{{ inventory_hostname_apache_site_conf_suffix if inventory_hostname != 'production' else '.conf' }}"
+    env_variables_file: "{{ [playbook_dir, 'vars', 'default_env.yml'] | path_join }}"
     env_variables_host_file: "{{ [playbook_dir, 'vars', inventory_hostname, 'env.yml'] | path_join }}"
+    secret_env_variables_file: "{{ [playbook_dir, 'vars', 'default_secret_env.yml'] | path_join }}"
     secret_env_variables_host_file: "{{ [playbook_dir, 'vars', inventory_hostname, 'secret_env.yml'] | path_join }}"
   vars:
     inventory_hostname_apache_site_conf_suffix: '-{{ inventory_hostname }}.conf'
