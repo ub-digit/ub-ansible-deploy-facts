@@ -1,19 +1,24 @@
 ---
 - name: Set host facts
   ansible.builtin.set_fact:
-    repo_name: '{{ repo_name }}'
-    repo_path: '{{ repo_path }}'
-    repo_secrets_env_example_file: "{{ [repo_path, docker_directory, 'secrets.env.example'] | path_join }}"
-    repo_secrets_env_file: "{{ [repo_path, docker_directory, 'secrets.env'] | path_join }}"
-    repo_env_file: "{{ [repo_path, docker_directory, '.env'] | path_join }}"
-    docker_directory_path: '{{ [repo_path, docker_directory] | path_join }}'
+    app_name: '{{ _app_name }}'
+    deploy_path: '{{ deploy_path }}'
     docker_command: '{{ docker_command }}'
+    deploy_base_path: '{{ deploy_base_path }}'
+    release_count: '{{ release_count }}'
+    releases_path: "{{ [deploy_path, 'releases'] | path_join }}"
+    current_release_path: "{{ [deploy_path, 'current'] | path_join }}"
+    release_secrets_env_example_file: 'secrets.env.example'
+    release_secrets_env_file: 'secrets.env'
+    release_env_file: '.env'
     apache_site_conf_suffix: "{{ inventory_hostname_apache_site_conf_suffix if inventory_hostname != 'production' else '.conf' }}"
+    local_repo_path: "{{ [playbook_dir, 'repo'] | path_join }}"
+    local_repo_docker_path: "{{ [playbook_dir, 'repo', docker_directory] | path_join }}"
     env_variables_file: "{{ [playbook_dir, 'vars', 'default_env.yml'] | path_join }}"
     env_variables_host_file: "{{ [playbook_dir, 'vars', inventory_hostname, 'env.yml'] | path_join }}"
     secret_env_variables_file: "{{ [playbook_dir, 'vars', 'default_secret_env.yml'] | path_join }}"
     secret_env_variables_host_file: "{{ [playbook_dir, 'vars', inventory_hostname, 'secret_env.yml'] | path_join }}"
   vars:
     inventory_hostname_apache_site_conf_suffix: '-{{ inventory_hostname }}.conf'
-    repo_name: "{{ docker_git_repo_url | regex_search('\\/([^\\/]+)\\.git', '\\1') | first }}"
-    repo_path: "{{ [deploy_directory, docker_git_repo_url | regex_search('\\/([^\\/]+)\\.git', '\\1') | first] | path_join }}"
+    _app_name: "{{ app_name | default(docker_git_repo_url | regex_search('\\/([^\\/]+)\\.git', '\\1') | first) }}"
+    deploy_path: "{{ [deploy_base_path, _app_name] | path_join }}"

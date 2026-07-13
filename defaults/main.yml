@@ -1,4 +1,5 @@
 docker_directory: './docker'
 docker_command: './docker-compose-release.sh'
 docker_scripts: []
-deploy_directory: '/apps'
+deploy_base_path: '/apps'
+release_count: 25
