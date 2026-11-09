@@ -8,6 +8,7 @@
     release_count: '{{ release_count }}'
     releases_path: "{{ [deploy_path, 'releases'] | path_join }}"
     current_release_path: "{{ [deploy_path, 'current'] | path_join }}"
+    docker_directory_path: "{{ [deploy_path, 'current'] | path_join }}"
     release_secrets_env_example_file: 'secrets.env.example'
     release_secrets_env_file: 'secrets.env'
     release_env_file: '.env'
